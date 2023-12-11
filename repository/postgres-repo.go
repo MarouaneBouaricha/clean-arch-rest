@@ -23,23 +23,23 @@ func NewPostgresRepository() PostRepository {
 	return &repo{}
 }
 
-func (*repo) Save(post *models.Post) (bool, error) {
+func (*repo) Save(post *models.Post) (*models.Post, error) {
 	db, err := connectToPostgreSQL()
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	// Perform database migration
 	err = db.AutoMigrate(&models.Post{})
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	err = db.Create(post).Error
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	log.Println("Created Post:", post)
-	return true, nil
+	return post, nil
 }
 
 func (*repo) FindAll() ([]models.Post, error) {

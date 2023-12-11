@@ -5,6 +5,6 @@ import (
 )
 
 type PostRepository interface {
-	Save(post *models.Post) (bool, error)
+	Save(post *models.Post) (*models.Post, error)
 	FindAll() ([]models.Post, error)
 }
