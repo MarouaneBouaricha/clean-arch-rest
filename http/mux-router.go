@@ -1,4 +1,4 @@
-package http
+package router
 
 import (
 	"fmt"
@@ -24,6 +24,6 @@ func (*muxRouter) POST(uri string, f func(w http.ResponseWriter, req *http.Reque
 	muxDispatcher.HandleFunc(uri, f).Methods("POST")
 }
 func (*muxRouter) SERVE(port string) {
-	fmt.Println("Mux HTTP server is running on port %v", port)
+	fmt.Println("Mux HTTP server is running on port", port)
 	http.ListenAndServe(port, muxDispatcher)
 }

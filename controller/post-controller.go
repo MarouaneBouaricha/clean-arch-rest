@@ -17,7 +17,13 @@ type PostController interface {
 	AddPost(resp http.ResponseWriter, req *http.Request)
 }
 
-func GetPosts(resp http.ResponseWriter, req *http.Request) {
+type controller struct{}
+
+func NewPostController() PostController {
+	return &controller{}
+}
+
+func (*controller) GetPosts(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
 	posts, err := postService.FindAll()
 	if err != nil {
@@ -29,7 +35,7 @@ func GetPosts(resp http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(resp).Encode(posts)
 }
 
-func AddPost(resp http.ResponseWriter, req *http.Request) {
+func (*controller) AddPost(resp http.ResponseWriter, req *http.Request) {
 	var post models.Post
 	resp.Header().Set("Content-type", "application/json")
 	err := json.NewDecoder(req.Body).Decode(&post)
