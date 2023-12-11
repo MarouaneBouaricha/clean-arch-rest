@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"clean-arch/errors"
 	"clean-arch/models"
 	"clean-arch/service"
 	"encoding/json"
@@ -16,7 +17,7 @@ func getPosts(resp http.ResponseWriter, req *http.Request) {
 	posts, err := postService.FindAll()
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`{"error": "Error getting posts"}`))
+		json.NewEncoder(resp).Encode(errors.ServiceError{Message: "Error getting posts"})
 		return
 	}
 	resp.WriteHeader(http.StatusOK)
@@ -29,16 +30,21 @@ func addPost(resp http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(&post)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`{"error": "Error marshelling the posts array"}`))
+		json.NewEncoder(resp).Encode(errors.ServiceError{Message: "Error unmarshelling data"})
 		return
 	}
 	err = postService.Validate(&post)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`{"error": "Error marshelling data"}`))
+		json.NewEncoder(resp).Encode(errors.ServiceError{Message: err.Error()})
 		return
 	}
-	postService.Create(&post)
+	result, err := postService.Create(&post)
+	if err != nil {
+		resp.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(resp).Encode(errors.ServiceError{Message: err.Error()})
+		return
+	}
 	resp.WriteHeader(http.StatusOK)
-	json.NewEncoder(resp).Encode(post)
+	json.NewEncoder(resp).Encode(result)
 }
