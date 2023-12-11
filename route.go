@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	repo repository.PostRepository = repository.NewPostRepository()
+	repo repository.PostRepository = repository.NewPostgresRepository()
 )
 
 func getPosts(resp http.ResponseWriter, req *http.Request) {
