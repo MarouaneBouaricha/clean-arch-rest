@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	httpRouter     router.Router             = router.NewMuxRouter()
+	httpRouter     router.Router             = router.NewChiRouter()
 	postController controller.PostController = controller.NewPostController()
 )
 
