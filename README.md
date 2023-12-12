@@ -4,8 +4,8 @@ Simple REST API that follows the Clean Architecture Principles
 - [x] Independent of Frameworks
 - [x] Independent of Databases
 - [x] Independent of UI
-- [ ] Independent of any external agency
-- [ ] Testable
+- [x] Independent of any external agency
+- [x] Testable
 
 ## Running Postgres Instance
 ```
@@ -15,4 +15,9 @@ docker run --name postgres-database -p 5432:5432 -e POSTGRES_USER=tux -e POSTGRE
 ## Running the api
 ```
 go run .
+```
+
+## Running tests for post-service
+```
+go test service/post-service.go service/post-service_test.go  -v
 ```
