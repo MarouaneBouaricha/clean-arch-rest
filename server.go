@@ -3,13 +3,17 @@ package main
 import (
 	"clean-arch/controller"
 	router "clean-arch/http"
+	"clean-arch/repository"
+	"clean-arch/service"
 	"fmt"
 	"net/http"
 )
 
 var (
+	postReposiroty repository.PostRepository = repository.NewPostgresRepository()
+	postService    service.PostService       = service.NewPostService(postReposiroty)
+	postController controller.PostController = controller.NewPostController(postService)
 	httpRouter     router.Router             = router.NewChiRouter()
-	postController controller.PostController = controller.NewPostController()
 )
 
 func main() {
